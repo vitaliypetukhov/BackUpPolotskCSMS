@@ -12,6 +12,8 @@ using System.Data.SqlClient;
 
 namespace BackUpBase
 {
+    
+
     public partial class Form1 : Form
     {
         private SqlConnection conn;
@@ -21,6 +23,27 @@ namespace BackUpBase
 
         string sql = "";
         string connectionString = "";
+
+        public string[] server2020arr = 
+        { 
+            "SERVER2020", 
+            "server2020", 
+            "Server2020", 
+            "SeRvEr2020", 
+            "sERVER2020",
+            "sErVeR2020"
+        };
+
+        public string[] winserverarr =
+        {
+            "WINSERVER",
+            "Winserver",
+            "wINSERVER",
+            "winserver",
+            "WiNsErVeR",
+            "wInSeRvEr"
+        };
+
 
         public Form1()
         {
@@ -38,12 +61,14 @@ namespace BackUpBase
             BtnBackupAll.Enabled = false;
             BtnBackupAll.Visible = false;
             checkBox1.Enabled = false;
+            checkBox1.Visible = false;
         }
 
         private void BtnConnect_Click(object sender, EventArgs e)
         {
             try
             {
+
                 connectionString = "Data Source = " +textDataSource.Text + "; User Id = " +txtUserId.Text+ "; Password = " +txtPassword.Text+";";
                 conn = new SqlConnection(connectionString);
                 conn.Open();
@@ -78,7 +103,16 @@ namespace BackUpBase
 
                 cmdDatabases.Enabled = true;
 
-                checkBox1.Enabled = true;
+                if(server2020arr.Contains(textDataSource.Text) || winserverarr.Contains(textDataSource.Text))
+                {
+                    checkBox1.Visible = true;
+                    checkBox1.Enabled = true;
+                }
+                else
+                {
+                    checkBox1.Visible = false;
+                    checkBox1.Enabled = false;
+                }              
 
                 MessageBox.Show("Подключение к источнику данных произведено успешно.\nТеперь необходимо выбрать базу данных для резервного копирования!");
             }
@@ -207,89 +241,17 @@ namespace BackUpBase
                 {
                     MessageBox.Show("Выберите местоположение для резервной копии!");
                     return;
-                } 
-
-                if (textDataSource.Text == "SERVER2020" || textDataSource.Text == "server2020" 
-                    || textDataSource.Text == "Server2020" || textDataSource.Text == "SeRvEr2020" 
-                    || textDataSource.Text == "sERVER2020")
-                {
-                    conn = new SqlConnection(connectionString);
-                    conn.Open();
-                    sql = "BACKUP DATABASE [ALLORG]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
-                    command = new SqlCommand(sql, conn);
-                    command.CommandTimeout = 0;
-                    command.ExecuteNonQuery();
-                    conn.Close();
-                    conn.Dispose();
-                    //MessageBox.Show("Резервное копирование ALLORG успешно произведено !");
-
-                    conn = new SqlConnection(connectionString);
-                    conn.Open();
-                    sql = "BACKUP DATABASE [EX_BD_PRIM]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
-                    command = new SqlCommand(sql, conn);
-                    command.CommandTimeout = 0;
-                    command.ExecuteNonQuery();
-                    conn.Close();
-                    conn.Dispose();
-                    //MessageBox.Show("Резервное копирование EX_BD_PRIM успешно произведено !");
-
-                    conn = new SqlConnection(connectionString);
-                    conn.Open();
-                    sql = "BACKUP DATABASE [Lab]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
-                    command = new SqlCommand(sql, conn);
-                    command.CommandTimeout = 0;
-                    command.ExecuteNonQuery();
-                    conn.Close();
-                    conn.Dispose();
-                    //MessageBox.Show("Резервное копирование Lab успешно произведено !");
-
-                    conn = new SqlConnection(connectionString);
-                    conn.Open();
-                    sql = "BACKUP DATABASE [EX_BD]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
-                    command = new SqlCommand(sql, conn);
-                    command.CommandTimeout = 0;
-                    command.ExecuteNonQuery();
-                    conn.Close();
-                    conn.Dispose();
-                    //MessageBox.Show("Резервное копирование EX_BD успешно произведено !");
-
-                    conn = new SqlConnection(connectionString);
-                    conn.Open();
-                    sql = "BACKUP DATABASE [" + "1SBASE" + "] TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
-                    command = new SqlCommand(sql, conn);
-                    command.CommandTimeout = 0;
-                    command.ExecuteNonQuery();
-                    conn.Close();
-                    conn.Dispose();
-                    //MessageBox.Show("Резервное копирование 1SBASE успешно произведено !");
-
-                    conn = new SqlConnection(connectionString);
-                    conn.Open();
-                    sql = "BACKUP DATABASE [EX_BD_USER]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
-                    command = new SqlCommand(sql, conn);
-                    command.CommandTimeout = 0;
-                    command.ExecuteNonQuery();
-                    conn.Close();
-                    conn.Dispose();
-                    //MessageBox.Show("Резервное копирование EX_BD_USER успешно произведено !");
-
-                    conn = new SqlConnection(connectionString);
-                    conn.Open();
-                    sql = "BACKUP DATABASE [FOND]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
-                    command = new SqlCommand(sql, conn);
-                    command.CommandTimeout = 0;
-                    command.ExecuteNonQuery();
-                    conn.Close();
-                    conn.Dispose();
-                    //MessageBox.Show("Резервное копирование FOND успешно произведено !");
-
-                    MessageBox.Show("Резервное копирование всех баз данных успешно произведено !");
                 }
-                if (textDataSource.Text == "winserver" || textDataSource.Text == "WINSERVER" 
-                    || textDataSource.Text == "Winserver" || textDataSource.Text == "WiNsErVeR"
-                    || textDataSource.Text == "wINSERVER")
+
+                if(server2020arr.Contains(textDataSource.Text))
                 {
-                    MessageBox.Show("HI  111111");
+                    BackUp2020();
+                    MessageBox.Show("Резервное копирование всех баз успешно произведено !");
+                }
+                if (winserverarr.Contains(textDataSource.Text))
+                {
+                    BackUpWinserver();
+                    MessageBox.Show("Резервное копирование всех баз успешно произведено !");
                 }
 
 
@@ -300,6 +262,82 @@ namespace BackUpBase
                 
             }
             
+        }        
+        public void BackUp2020()
+        {
+            conn = new SqlConnection(connectionString);
+            conn.Open();
+            sql = "BACKUP DATABASE [ALLORG]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+            command = new SqlCommand(sql, conn);
+            command.CommandTimeout = 0;
+            command.ExecuteNonQuery();
+            conn.Close();
+            conn.Dispose();
+            //MessageBox.Show("Резервное копирование ALLORG успешно произведено !");
+
+            conn = new SqlConnection(connectionString);
+            conn.Open();
+            sql = "BACKUP DATABASE [EX_BD_PRIM]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+            command = new SqlCommand(sql, conn);
+            command.CommandTimeout = 0;
+            command.ExecuteNonQuery();
+            conn.Close();
+            conn.Dispose();
+            //MessageBox.Show("Резервное копирование EX_BD_PRIM успешно произведено !");
+
+            conn = new SqlConnection(connectionString);
+            conn.Open();
+            sql = "BACKUP DATABASE [Lab]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+            command = new SqlCommand(sql, conn);
+            command.CommandTimeout = 0;
+            command.ExecuteNonQuery();
+            conn.Close();
+            conn.Dispose();
+            //MessageBox.Show("Резервное копирование Lab успешно произведено !");
+
+            conn = new SqlConnection(connectionString);
+            conn.Open();
+            sql = "BACKUP DATABASE [EX_BD]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+            command = new SqlCommand(sql, conn);
+            command.CommandTimeout = 0;
+            command.ExecuteNonQuery();
+            conn.Close();
+            conn.Dispose();
+            //MessageBox.Show("Резервное копирование EX_BD успешно произведено !");
+
+            conn = new SqlConnection(connectionString);
+            conn.Open();
+            sql = "BACKUP DATABASE [" + "1SBASE" + "] TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+            command = new SqlCommand(sql, conn);
+            command.CommandTimeout = 0;
+            command.ExecuteNonQuery();
+            conn.Close();
+            conn.Dispose();
+            //MessageBox.Show("Резервное копирование 1SBASE успешно произведено !");
+
+            conn = new SqlConnection(connectionString);
+            conn.Open();
+            sql = "BACKUP DATABASE [EX_BD_USER]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+            command = new SqlCommand(sql, conn);
+            command.CommandTimeout = 0;
+            command.ExecuteNonQuery();
+            conn.Close();
+            conn.Dispose();
+            //MessageBox.Show("Резервное копирование EX_BD_USER успешно произведено !");
+
+            conn = new SqlConnection(connectionString);
+            conn.Open();
+            sql = "BACKUP DATABASE [FOND]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+            command = new SqlCommand(sql, conn);
+            command.CommandTimeout = 0;
+            command.ExecuteNonQuery();
+            conn.Close();
+            conn.Dispose();
+        }
+        
+        public void BackUpWinserver()
+        {
+
         }
     }
 }
