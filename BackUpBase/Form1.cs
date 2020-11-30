@@ -10,6 +10,8 @@ using System.Windows.Forms;
 
 using System.Data.SqlClient;
 
+using System.IO.Compression;
+
 namespace BackUpBase
 {
     
@@ -19,7 +21,6 @@ namespace BackUpBase
         private SqlConnection conn;
         private SqlCommand command;
         private SqlDataReader reader;  
-
 
         string sql = "";
         string connectionString = "";
@@ -44,7 +45,6 @@ namespace BackUpBase
             "wInSeRvEr"
         };
 
-
         public Form1()
         {
             InitializeComponent();
@@ -57,7 +57,6 @@ namespace BackUpBase
             BtnBackup.Enabled = false;
             BtnRestore.Enabled = false;
 
-
             BtnBackupAll.Enabled = false;
             BtnBackupAll.Visible = false;
             checkBox1.Enabled = false;
@@ -68,13 +67,11 @@ namespace BackUpBase
         {
             try
             {
-
                 connectionString = "Data Source = " +textDataSource.Text + "; User Id = " +txtUserId.Text+ "; Password = " +txtPassword.Text+";";
                 conn = new SqlConnection(connectionString);
                 conn.Open();
 
                 //sql = "EXEC sp_databases";
-
                 // SERVER2020\SQLEXPRESS
 
                 sql = "SELECT * FROM sys.databases d WHERE d.database_id > 4";
@@ -146,6 +143,9 @@ namespace BackUpBase
                     return;
                 }
 
+                // string name_zip_file;
+                //string name_folder;
+
                 conn = new SqlConnection(connectionString);
                 conn.Open();
                 sql = "BACKUP DATABASE [" + cmdDatabases.Text + "] TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
@@ -153,10 +153,16 @@ namespace BackUpBase
                 command = new SqlCommand(sql, conn);
                 command.CommandTimeout = 0;
                 command.ExecuteNonQuery();
-                
+                                
+                //name_zip_file = cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".zip";
+                //name_folder = txtBackupLoc.Text + "\\";
+
                 conn.Close();
                 conn.Dispose();
                 MessageBox.Show("Резервное копирование произведено успешно !");
+
+               // ZipFile.CreateFromDirectory(name_folder, name_folder + name_zip_file);
+               // MessageBox.Show(" -----> ZipName: {" + name_folder + name_zip_file +"} !");
 
             }
             catch (Exception ex)
@@ -232,8 +238,7 @@ namespace BackUpBase
         }
 
         private void BtnBackupAll_Click(object sender, EventArgs e)
-        {
-                       
+        {                       
              try 
             {
 
@@ -246,20 +251,18 @@ namespace BackUpBase
                 if(server2020arr.Contains(textDataSource.Text))
                 {
                     BackUp2020();
-                    MessageBox.Show("Резервное копирование всех баз успешно произведено !");
+                    MessageBox.Show("Резервное копирование всех баз SERVER2020 успешно произведено !");
                 }
                 if (winserverarr.Contains(textDataSource.Text))
                 {
                     BackUpWinserver();
-                    MessageBox.Show("Резервное копирование всех баз успешно произведено !");
+                    MessageBox.Show("Резервное копирование всех баз WINSERVER успешно произведено !");
                 }
-
 
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
-                
+                MessageBox.Show(ex.Message);                
             }
             
         }        
@@ -337,6 +340,69 @@ namespace BackUpBase
         
         public void BackUpWinserver()
         {
+
+            conn = new SqlConnection(connectionString);
+            conn.Open();
+            sql = "BACKUP DATABASE [ALLORG]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+            command = new SqlCommand(sql, conn);
+            command.CommandTimeout = 0;
+            command.ExecuteNonQuery();
+            conn.Close();
+            conn.Dispose();
+
+            conn = new SqlConnection(connectionString);
+            conn.Open();
+            sql = "BACKUP DATABASE [EX_BD_PRIM]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+            command = new SqlCommand(sql, conn);
+            command.CommandTimeout = 0;
+            command.ExecuteNonQuery();
+            conn.Close();
+            conn.Dispose();
+
+            conn = new SqlConnection(connectionString);
+            conn.Open();
+            sql = "BACKUP DATABASE [EX_BD_USER]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+            command = new SqlCommand(sql, conn);
+            command.CommandTimeout = 0;
+            command.ExecuteNonQuery();
+            conn.Close();
+            conn.Dispose();
+
+            conn = new SqlConnection(connectionString);
+            conn.Open();
+            sql = "BACKUP DATABASE [EX_BD]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+            command = new SqlCommand(sql, conn);
+            command.CommandTimeout = 0;
+            command.ExecuteNonQuery();
+            conn.Close();
+            conn.Dispose();
+
+            conn = new SqlConnection(connectionString);
+            conn.Open();
+            sql = "BACKUP DATABASE [FOND]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+            command = new SqlCommand(sql, conn);
+            command.CommandTimeout = 0;
+            command.ExecuteNonQuery();
+            conn.Close();
+            conn.Dispose();
+
+            conn = new SqlConnection(connectionString);
+            conn.Open();
+            sql = "BACKUP DATABASE [1SBASE]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+            command = new SqlCommand(sql, conn);
+            command.CommandTimeout = 0;
+            command.ExecuteNonQuery();
+            conn.Close();
+            conn.Dispose();
+
+            conn = new SqlConnection(connectionString);
+            conn.Open();
+            sql = "BACKUP DATABASE [SMBusiness]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+            command = new SqlCommand(sql, conn);
+            command.CommandTimeout = 0;
+            command.ExecuteNonQuery();
+            conn.Close();
+            conn.Dispose();
 
         }
     }
