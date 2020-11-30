@@ -83,6 +83,7 @@
             // 
             this.txtPassword.Location = new System.Drawing.Point(385, 68);
             this.txtPassword.Name = "txtPassword";
+            this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(136, 22);
             this.txtPassword.TabIndex = 7;
             // 
@@ -178,7 +179,7 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(538, 12);
+            this.pictureBox1.Location = new System.Drawing.Point(541, 12);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(139, 65);
             this.pictureBox1.TabIndex = 2;
