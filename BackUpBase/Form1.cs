@@ -48,6 +48,8 @@ namespace BackUpBase
         public Form1()
         {
             InitializeComponent();
+
+            linkLabel1.LinkClicked += linkLabel1_LinkClicked;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -404,6 +406,11 @@ namespace BackUpBase
             conn.Close();
             conn.Dispose();
 
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://www.linkedin.com/in/vitaliy-petukhov-206a3a156/");
         }
     }
 }
