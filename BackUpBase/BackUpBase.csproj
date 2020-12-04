@@ -48,7 +48,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>backuplogo.ico</ApplicationIcon>
+    <ApplicationIcon>backuplogo1.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -112,6 +112,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="backuplogo.ico" />
+    <Content Include="backuplogo1.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

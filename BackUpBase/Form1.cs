@@ -272,7 +272,7 @@ namespace BackUpBase
         {
             conn = new SqlConnection(connectionString);
             conn.Open();
-            sql = "BACKUP DATABASE [ALLORG]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+            sql = "BACKUP DATABASE [ALLORG]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + "ALLORG" + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
             command = new SqlCommand(sql, conn);
             command.CommandTimeout = 0;
             command.ExecuteNonQuery();
@@ -282,7 +282,7 @@ namespace BackUpBase
 
             conn = new SqlConnection(connectionString);
             conn.Open();
-            sql = "BACKUP DATABASE [EX_BD_PRIM]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+            sql = "BACKUP DATABASE [EX_BD_PRIM]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + "EX_BD_PRIM" + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
             command = new SqlCommand(sql, conn);
             command.CommandTimeout = 0;
             command.ExecuteNonQuery();
@@ -292,7 +292,7 @@ namespace BackUpBase
 
             conn = new SqlConnection(connectionString);
             conn.Open();
-            sql = "BACKUP DATABASE [Lab]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+            sql = "BACKUP DATABASE [Lab]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + "Lab" + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
             command = new SqlCommand(sql, conn);
             command.CommandTimeout = 0;
             command.ExecuteNonQuery();
@@ -302,7 +302,7 @@ namespace BackUpBase
 
             conn = new SqlConnection(connectionString);
             conn.Open();
-            sql = "BACKUP DATABASE [EX_BD]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+            sql = "BACKUP DATABASE [EX_BD]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + "EX_BD" + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
             command = new SqlCommand(sql, conn);
             command.CommandTimeout = 0;
             command.ExecuteNonQuery();
@@ -312,7 +312,8 @@ namespace BackUpBase
 
             conn = new SqlConnection(connectionString);
             conn.Open();
-            sql = "BACKUP DATABASE [" + "1SBASE" + "] TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+            //sql = "BACKUP DATABASE [" + "1SBASE" + "] TO DISK = '" + txtBackupLoc.Text + "\\" + "1SBASE" + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+            sql = "BACKUP DATABASE [1SBASE]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + "1SBASE" + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
             command = new SqlCommand(sql, conn);
             command.CommandTimeout = 0;
             command.ExecuteNonQuery();
@@ -322,7 +323,7 @@ namespace BackUpBase
 
             conn = new SqlConnection(connectionString);
             conn.Open();
-            sql = "BACKUP DATABASE [EX_BD_USER]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+            sql = "BACKUP DATABASE [EX_BD_USER]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + "EX_BD_USER" + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
             command = new SqlCommand(sql, conn);
             command.CommandTimeout = 0;
             command.ExecuteNonQuery();
@@ -332,7 +333,7 @@ namespace BackUpBase
 
             conn = new SqlConnection(connectionString);
             conn.Open();
-            sql = "BACKUP DATABASE [FOND]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+            sql = "BACKUP DATABASE [FOND]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + "FOND" + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
             command = new SqlCommand(sql, conn);
             command.CommandTimeout = 0;
             command.ExecuteNonQuery();
@@ -345,7 +346,7 @@ namespace BackUpBase
 
             conn = new SqlConnection(connectionString);
             conn.Open();
-            sql = "BACKUP DATABASE [ALLORG]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+            sql = "BACKUP DATABASE [ALLORG]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + "ALLORG" + " - " + DateTime.Now.Ticks.ToString() + ".bak'";
             command = new SqlCommand(sql, conn);
             command.CommandTimeout = 0;
             command.ExecuteNonQuery();
@@ -354,7 +355,7 @@ namespace BackUpBase
 
             conn = new SqlConnection(connectionString);
             conn.Open();
-            sql = "BACKUP DATABASE [EX_BD_PRIM]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+            sql = "BACKUP DATABASE [EX_BD_PRIM]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + "EX_BD_PRIM" + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
             command = new SqlCommand(sql, conn);
             command.CommandTimeout = 0;
             command.ExecuteNonQuery();
@@ -363,7 +364,7 @@ namespace BackUpBase
 
             conn = new SqlConnection(connectionString);
             conn.Open();
-            sql = "BACKUP DATABASE [EX_BD_USER]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+            sql = "BACKUP DATABASE [EX_BD_USER]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + "EX_BD_USER" + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
             command = new SqlCommand(sql, conn);
             command.CommandTimeout = 0;
             command.ExecuteNonQuery();
@@ -372,7 +373,7 @@ namespace BackUpBase
 
             conn = new SqlConnection(connectionString);
             conn.Open();
-            sql = "BACKUP DATABASE [EX_BD]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+            sql = "BACKUP DATABASE [EX_BD]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + "EX_BD" + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
             command = new SqlCommand(sql, conn);
             command.CommandTimeout = 0;
             command.ExecuteNonQuery();
@@ -381,7 +382,7 @@ namespace BackUpBase
 
             conn = new SqlConnection(connectionString);
             conn.Open();
-            sql = "BACKUP DATABASE [FOND]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+            sql = "BACKUP DATABASE [FOND]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + "FOND" + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
             command = new SqlCommand(sql, conn);
             command.CommandTimeout = 0;
             command.ExecuteNonQuery();
@@ -390,7 +391,7 @@ namespace BackUpBase
 
             conn = new SqlConnection(connectionString);
             conn.Open();
-            sql = "BACKUP DATABASE [1SBASE]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+            sql = "BACKUP DATABASE [1SBASE]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + "1SBASE" + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
             command = new SqlCommand(sql, conn);
             command.CommandTimeout = 0;
             command.ExecuteNonQuery();
@@ -399,7 +400,7 @@ namespace BackUpBase
 
             conn = new SqlConnection(connectionString);
             conn.Open();
-            sql = "BACKUP DATABASE [SMBusiness]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+            sql = "BACKUP DATABASE [SMBusiness]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + "SMBusiness" + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
             command = new SqlCommand(sql, conn);
             command.CommandTimeout = 0;
             command.ExecuteNonQuery();
