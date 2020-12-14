@@ -63,6 +63,10 @@ namespace BackUpBase
             BtnBackupAll.Visible = false;
             checkBox1.Enabled = false;
             checkBox1.Visible = false;
+
+            typeBackpupCB.Enabled = false;
+            BtnBrowse.Enabled = false;
+            BtnDBFileBrowse.Enabled = false;
         }
 
         private void BtnConnect_Click(object sender, EventArgs e)
@@ -98,6 +102,10 @@ namespace BackUpBase
                 BtnRestore.Enabled = true;
 
                 cmdDatabases.Enabled = true;
+                typeBackpupCB.Enabled = true;
+
+                BtnDBFileBrowse.Enabled = true;
+                BtnBrowse.Enabled = true;
 
                 if(server2020arr.Contains(textDataSource.Text) || winserverarr.Contains(textDataSource.Text))
                 {
@@ -125,11 +133,16 @@ namespace BackUpBase
             txtUserId.Enabled = true;
             cmdDatabases.Enabled = false;
 
+            typeBackpupCB.Enabled = false;
+
             BtnBackup.Enabled = false;
             BtnRestore.Enabled = false;
             BtnConnect.Enabled = true;
 
             checkBox1.Enabled = false;
+
+            BtnBrowse.Enabled = false;
+            BtnDBFileBrowse.Enabled = false;
         }
 
         private void BtnBackup_Click(object sender, EventArgs e)
@@ -142,13 +155,26 @@ namespace BackUpBase
                     return;
                 }
 
+                if (typeBackpupCB.Text.CompareTo("") == 0)
+                {
+                    MessageBox.Show("Тип копии не выбран!");
+                    return;
+                }
+
                 conn = new SqlConnection(connectionString);
                 conn.Open();
-                sql = "BACKUP DATABASE [" + cmdDatabases.Text + "] TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
 
+                if (typeBackpupCB.SelectedIndex == 0)
+                {                  
+                    sql = "BACKUP DATABASE [" + cmdDatabases.Text + "] TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + ".bak'";
+                }
+                else
+                {                
+                    sql = "BACKUP DATABASE [" + cmdDatabases.Text + "] TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + ".bak' " + "WITH DIFFERENTIAL";//"-" + DateTime.Now.Ticks.ToString() + ".bak'";
+                }
                 command = new SqlCommand(sql, conn);
                 command.CommandTimeout = 0;
-                command.ExecuteNonQuery();                              
+                command.ExecuteNonQuery();
                 conn.Close();
                 conn.Dispose();
                 MessageBox.Show("Резервное копирование произведено успешно !");
@@ -192,7 +218,7 @@ namespace BackUpBase
                 {
                     MessageBox.Show("Резервная копия базы данных не выбрана!");
                     return;
-                }
+                }                
 
                 conn = new SqlConnection(connectionString);
                 conn.Open();
@@ -217,11 +243,17 @@ namespace BackUpBase
             {
                 BtnBackupAll.Enabled = true;
                 BtnBackupAll.Visible = true;
+
+                BtnBackup.Enabled = false;
+                BtnBackup.Visible = false;
             }
             else
             {
                 BtnBackupAll.Enabled = false;
                 BtnBackupAll.Visible = false;
+
+                BtnBackup.Enabled = true;
+                BtnBackup.Visible = true;
             }
         }
 
@@ -233,6 +265,12 @@ namespace BackUpBase
                 if (txtBackupLoc.Text.CompareTo("") == 0)
                 {
                     MessageBox.Show("Выберите местоположение для резервной копии!");
+                    return;
+                }
+
+                if(typeBackpupCB.Text.CompareTo("") == 0)
+                {
+                    MessageBox.Show("Тип копии не выбран!");
                     return;
                 }
 
@@ -250,7 +288,16 @@ namespace BackUpBase
                     conn = new SqlConnection(connectionString);
                     conn.Open();
                     nameBase = "ALLORG";
-                    sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+
+                    if(typeBackpupCB.SelectedIndex == 0)
+                    {
+                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
+                    }
+                    else
+                    {
+                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
+                    }
+                    
                     command = new SqlCommand(sql, conn);
                     command.CommandTimeout = 0;
                     command.ExecuteNonQuery();
@@ -264,11 +311,16 @@ namespace BackUpBase
                     //------ EX_BD_PRIM
                     conn = new SqlConnection(connectionString);
                     conn.Open();
-
                     nameBase = "EX_BD_PRIM";
 
-                    sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" +  nameBase + "-"
-                        + DateTime.Now.Ticks.ToString() + ".bak'";
+                    if (typeBackpupCB.SelectedIndex == 0)
+                    {
+                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
+                    }
+                    else
+                    {
+                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
+                    }
 
                     command = new SqlCommand(sql, conn);
                     command.CommandTimeout = 0;
@@ -283,10 +335,16 @@ namespace BackUpBase
                     //------ Lab
                     conn = new SqlConnection(connectionString);
                     conn.Open();
-
                     nameBase = "Lab";
-                    sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" +  nameBase + "-"
-                        + DateTime.Now.Ticks.ToString() + ".bak'";
+
+                    if (typeBackpupCB.SelectedIndex == 0)
+                    {
+                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
+                    }
+                    else
+                    {
+                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
+                    }
 
                     command = new SqlCommand(sql, conn);
                     command.CommandTimeout = 0;
@@ -301,10 +359,16 @@ namespace BackUpBase
                     //------ EX_BD
                     conn = new SqlConnection(connectionString);
                     conn.Open();
-
                     nameBase = "EX_BD";
-                    sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" +  nameBase + "-"
-                        + DateTime.Now.Ticks.ToString() + ".bak'";
+
+                    if (typeBackpupCB.SelectedIndex == 0)
+                    {
+                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
+                    }
+                    else
+                    {
+                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
+                    }
 
                     command = new SqlCommand(sql, conn);
                     command.CommandTimeout = 0;
@@ -319,10 +383,16 @@ namespace BackUpBase
                     //----------- 1SBASE
                     conn = new SqlConnection(connectionString);
                     conn.Open();
-
                     nameBase = "1SBASE";
-                    sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" +  nameBase + "-"
-                        + DateTime.Now.Ticks.ToString() + ".bak'";
+
+                    if (typeBackpupCB.SelectedIndex == 0)
+                    {
+                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
+                    }
+                    else
+                    {
+                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
+                    }
 
                     command = new SqlCommand(sql, conn);
                     command.CommandTimeout = 0;
@@ -336,10 +406,16 @@ namespace BackUpBase
                     //---------------EX_BD_USER
                     conn = new SqlConnection(connectionString);
                     conn.Open();
-
                     nameBase = "EX_BD_USER";
-                    sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" +  nameBase + "-"
-                        + DateTime.Now.Ticks.ToString() + ".bak'";
+
+                    if (typeBackpupCB.SelectedIndex == 0)
+                    {
+                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
+                    }
+                    else
+                    {
+                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
+                    }
 
                     command = new SqlCommand(sql, conn);
                     command.CommandTimeout = 0;
@@ -354,10 +430,16 @@ namespace BackUpBase
                     //---------- FOND
                     conn = new SqlConnection(connectionString);
                     conn.Open();
-
                     nameBase = "FOND";
-                    sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + "-"
-                        + DateTime.Now.Ticks.ToString() + ".bak'";
+
+                    if (typeBackpupCB.SelectedIndex == 0)
+                    {
+                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
+                    }
+                    else
+                    {
+                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
+                    }
 
                     command = new SqlCommand(sql, conn);
                     command.CommandTimeout = 0;
@@ -387,7 +469,14 @@ namespace BackUpBase
                     conn = new SqlConnection(connectionString);
                     conn.Open();
                     nameBase = "ALLORG";
-                    sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + "-" + DateTime.Now.Ticks.ToString() + ".bak'";
+                    if (typeBackpupCB.SelectedIndex == 0)
+                    {
+                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
+                    }
+                    else
+                    {
+                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
+                    }
                     command = new SqlCommand(sql, conn);
                     command.CommandTimeout = 0;
                     command.ExecuteNonQuery();
@@ -401,11 +490,16 @@ namespace BackUpBase
                     //------ EX_BD_PRIM
                     conn = new SqlConnection(connectionString);
                     conn.Open();
-
                     nameBase = "EX_BD_PRIM";
 
-                    sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + "-"
-                        + DateTime.Now.Ticks.ToString() + ".bak'";
+                    if (typeBackpupCB.SelectedIndex == 0)
+                    {
+                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
+                    }
+                    else
+                    {
+                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
+                    }
 
                     command = new SqlCommand(sql, conn);
                     command.CommandTimeout = 0;
@@ -420,10 +514,16 @@ namespace BackUpBase
                     //------ EX_BD_USER
                     conn = new SqlConnection(connectionString);
                     conn.Open();
-
                     nameBase = "EX_BD_USER";
-                    sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + "-"
-                        + DateTime.Now.Ticks.ToString() + ".bak'";
+
+                    if (typeBackpupCB.SelectedIndex == 0)
+                    {
+                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
+                    }
+                    else
+                    {
+                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
+                    }
 
                     command = new SqlCommand(sql, conn);
                     command.CommandTimeout = 0;
@@ -438,10 +538,16 @@ namespace BackUpBase
                     //------ EX_BD
                     conn = new SqlConnection(connectionString);
                     conn.Open();
-
                     nameBase = "EX_BD";
-                    sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + "-"
-                        + DateTime.Now.Ticks.ToString() + ".bak'";
+
+                    if (typeBackpupCB.SelectedIndex == 0)
+                    {
+                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
+                    }
+                    else
+                    {
+                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
+                    }
 
                     command = new SqlCommand(sql, conn);
                     command.CommandTimeout = 0;
@@ -456,10 +562,16 @@ namespace BackUpBase
                     //----------- 1SBASE
                     conn = new SqlConnection(connectionString);
                     conn.Open();
-
                     nameBase = "1SBASE";
-                    sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + "-"
-                        + DateTime.Now.Ticks.ToString() + ".bak'";
+
+                    if (typeBackpupCB.SelectedIndex == 0)
+                    {
+                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
+                    }
+                    else
+                    {
+                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
+                    }
 
                     command = new SqlCommand(sql, conn);
                     command.CommandTimeout = 0;
@@ -473,10 +585,16 @@ namespace BackUpBase
                     //---------------SMBusiness
                     conn = new SqlConnection(connectionString);
                     conn.Open();
-
                     nameBase = "SMBusiness";
-                    sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + "-"
-                        + DateTime.Now.Ticks.ToString() + ".bak'";
+
+                    if (typeBackpupCB.SelectedIndex == 0)
+                    {
+                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
+                    }
+                    else
+                    {
+                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
+                    }
 
                     command = new SqlCommand(sql, conn);
                     command.CommandTimeout = 0;
@@ -491,10 +609,16 @@ namespace BackUpBase
                     //---------- FOND
                     conn = new SqlConnection(connectionString);
                     conn.Open();
-
                     nameBase = "FOND";
-                    sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + "-"
-                        + DateTime.Now.Ticks.ToString() + ".bak'";
+
+                    if (typeBackpupCB.SelectedIndex == 0)
+                    {
+                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
+                    }
+                    else
+                    {
+                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
+                    }
 
                     command = new SqlCommand(sql, conn);
                     command.CommandTimeout = 0;

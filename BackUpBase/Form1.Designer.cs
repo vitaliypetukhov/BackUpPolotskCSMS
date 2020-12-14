@@ -55,6 +55,8 @@
             this.txtRestoreFileLoc = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.label7 = new System.Windows.Forms.Label();
+            this.typeBackpupCB = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -169,7 +171,7 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(147, 59);
+            this.checkBox1.Location = new System.Drawing.Point(155, 58);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(346, 18);
             this.checkBox1.TabIndex = 3;
@@ -188,8 +190,9 @@
             // 
             // cmdDatabases
             // 
+            this.cmdDatabases.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmdDatabases.FormattingEnabled = true;
-            this.cmdDatabases.Location = new System.Drawing.Point(147, 31);
+            this.cmdDatabases.Location = new System.Drawing.Point(155, 30);
             this.cmdDatabases.Name = "cmdDatabases";
             this.cmdDatabases.Size = new System.Drawing.Size(366, 22);
             this.cmdDatabases.TabIndex = 1;
@@ -206,6 +209,8 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.typeBackpupCB);
+            this.groupBox3.Controls.Add(this.label7);
             this.groupBox3.Controls.Add(this.BtnBackupAll);
             this.groupBox3.Controls.Add(this.BtnBackup);
             this.groupBox3.Controls.Add(this.BtnBrowse);
@@ -251,8 +256,9 @@
             // 
             // txtBackupLoc
             // 
-            this.txtBackupLoc.Location = new System.Drawing.Point(148, 33);
+            this.txtBackupLoc.Location = new System.Drawing.Point(156, 27);
             this.txtBackupLoc.Name = "txtBackupLoc";
+            this.txtBackupLoc.ReadOnly = true;
             this.txtBackupLoc.Size = new System.Drawing.Size(365, 22);
             this.txtBackupLoc.TabIndex = 1;
             // 
@@ -260,7 +266,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label5.Location = new System.Drawing.Point(12, 38);
+            this.label5.Location = new System.Drawing.Point(12, 31);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(125, 14);
             this.label5.TabIndex = 0;
@@ -282,7 +288,7 @@
             // 
             // BtnRestore
             // 
-            this.BtnRestore.Location = new System.Drawing.Point(534, 62);
+            this.BtnRestore.Location = new System.Drawing.Point(535, 59);
             this.BtnRestore.Name = "BtnRestore";
             this.BtnRestore.Size = new System.Drawing.Size(148, 23);
             this.BtnRestore.TabIndex = 7;
@@ -302,8 +308,9 @@
             // 
             // txtRestoreFileLoc
             // 
-            this.txtRestoreFileLoc.Location = new System.Drawing.Point(147, 36);
+            this.txtRestoreFileLoc.Location = new System.Drawing.Point(154, 36);
             this.txtRestoreFileLoc.Name = "txtRestoreFileLoc";
+            this.txtRestoreFileLoc.ReadOnly = true;
             this.txtRestoreFileLoc.Size = new System.Drawing.Size(365, 22);
             this.txtRestoreFileLoc.TabIndex = 5;
             // 
@@ -329,6 +336,28 @@
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "Copyright © Петухов В.А, 2020  Все права защищены";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label7.Location = new System.Drawing.Point(12, 71);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(75, 14);
+            this.label7.TabIndex = 5;
+            this.label7.Text = "Тип копии";
+            // 
+            // typeBackpupCB
+            // 
+            this.typeBackpupCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.typeBackpupCB.FormattingEnabled = true;
+            this.typeBackpupCB.Items.AddRange(new object[] {
+            "INIT\t",
+            "DIFFERENTIAL"});
+            this.typeBackpupCB.Location = new System.Drawing.Point(156, 69);
+            this.typeBackpupCB.Name = "typeBackpupCB";
+            this.typeBackpupCB.Size = new System.Drawing.Size(365, 22);
+            this.typeBackpupCB.TabIndex = 6;
             // 
             // Form1
             // 
@@ -390,6 +419,8 @@
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Button BtnBackupAll;
         private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.ComboBox typeBackpupCB;
+        private System.Windows.Forms.Label label7;
     }
 }
 
