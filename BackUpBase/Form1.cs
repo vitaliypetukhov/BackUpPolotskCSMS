@@ -13,8 +13,7 @@ using System.Data.SqlClient;
 using System.IO.Compression;
 
 namespace BackUpBase
-{
-    
+{   
 
     public partial class Form1 : Form
     {
@@ -73,6 +72,24 @@ namespace BackUpBase
         {
             try
             {
+                if (textDataSource.Text.CompareTo("") == 0)
+                {
+                    MessageBox.Show("Ошибка подключения к базе данных!\nПроверьте правильность ввода наименования сервера.");
+                    return;
+                }
+                
+                if (txtPassword.Text.CompareTo("") == 0)
+                {
+                    MessageBox.Show("Ошибка подключения к базе данных!\nПроверьте правильность ввода логина для подключения.");
+                    return;
+                }
+
+                if (txtUserId.Text.CompareTo("") == 0)
+                {
+                    MessageBox.Show("Ошибка подключения к базе данных!\nПроверьте правильность ввода пароля для подключения.");
+                    return;
+                }
+
                 connectionString = "Data Source = " +textDataSource.Text + "; User Id = " +txtUserId.Text+ "; Password = " +txtPassword.Text+";";
                 conn = new SqlConnection(connectionString);
                 conn.Open();
