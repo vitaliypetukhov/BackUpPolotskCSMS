@@ -7,13 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using System.Threading;
 using System.Data.SqlClient;
 
 using System.IO.Compression;
 
 namespace BackUpBase
 {   
+
+   
 
     public partial class Form1 : Form
     {
@@ -66,6 +68,14 @@ namespace BackUpBase
             typeBackpupCB.Enabled = false;
             BtnBrowse.Enabled = false;
             BtnDBFileBrowse.Enabled = false;
+        }
+
+        private void Form1_Closing(object sender, FormClosingEventArgs e)
+        {
+            conn = new SqlConnection(connectionString);
+            conn.Close();
+            e.Cancel = true;
+            this.Close();
         }
 
         private void BtnConnect_Click(object sender, EventArgs e)
@@ -296,9 +306,14 @@ namespace BackUpBase
                     ProgressBarForm formprogress = new ProgressBarForm();
                     formprogress.Show();
 
+                    formprogress.Refresh();
+                    Thread.Sleep(1000);
+
                     this.Hide();
 
                     int value_to_form_progressbar = 0;
+                    string value_label_progessbar = "Пожалуйста подождите, идет резервное копирование баз данных";
+
                     string nameBase;                    
 
                     //------ ALLORG
@@ -318,12 +333,16 @@ namespace BackUpBase
                     command = new SqlCommand(sql, conn);
                     command.CommandTimeout = 0;
                     command.ExecuteNonQuery();
-
+                    
                     value_to_form_progressbar += 15;
                     formprogress.PeredachaLoadaPB(value_to_form_progressbar);
+                    value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
+                    formprogress.PeredachaLabelPB(value_label_progessbar);
 
                     conn.Close();
                     conn.Dispose();
+
+                    Thread.Sleep(5000);
 
                     //------ EX_BD_PRIM
                     conn = new SqlConnection(connectionString);
@@ -345,9 +364,13 @@ namespace BackUpBase
 
                     value_to_form_progressbar += 15;
                     formprogress.PeredachaLoadaPB(value_to_form_progressbar);
+                    value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
+                    formprogress.PeredachaLabelPB(value_label_progessbar);
 
                     conn.Close();
                     conn.Dispose();
+
+                    Thread.Sleep(5000);
 
                     //------ Lab
                     conn = new SqlConnection(connectionString);
@@ -369,9 +392,13 @@ namespace BackUpBase
 
                     value_to_form_progressbar += 15;
                     formprogress.PeredachaLoadaPB(value_to_form_progressbar);
+                    value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
+                    formprogress.PeredachaLabelPB(value_label_progessbar);
 
                     conn.Close();
                     conn.Dispose();
+
+                    Thread.Sleep(5000);
 
                     //------ EX_BD
                     conn = new SqlConnection(connectionString);
@@ -393,9 +420,13 @@ namespace BackUpBase
 
                     value_to_form_progressbar += 15;
                     formprogress.PeredachaLoadaPB(value_to_form_progressbar);
+                    value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
+                    formprogress.PeredachaLabelPB(value_label_progessbar);
 
                     conn.Close();
                     conn.Dispose();
+
+                    Thread.Sleep(5000);
 
                     //----------- 1SBASE
                     conn = new SqlConnection(connectionString);
@@ -416,9 +447,13 @@ namespace BackUpBase
                     command.ExecuteNonQuery();
                     value_to_form_progressbar += 15;
                     formprogress.PeredachaLoadaPB(value_to_form_progressbar);
+                    value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
+                    formprogress.PeredachaLabelPB(value_label_progessbar);
 
                     conn.Close();
                     conn.Dispose();
+
+                    Thread.Sleep(5000);
 
                     //---------------EX_BD_USER
                     conn = new SqlConnection(connectionString);
@@ -440,9 +475,13 @@ namespace BackUpBase
 
                     value_to_form_progressbar += 15;
                     formprogress.PeredachaLoadaPB(value_to_form_progressbar);
+                    value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
+                    formprogress.PeredachaLabelPB(value_label_progessbar);
 
                     conn.Close();
                     conn.Dispose();
+
+                    Thread.Sleep(5000);
 
                     //---------- FOND
                     conn = new SqlConnection(connectionString);
@@ -464,6 +503,8 @@ namespace BackUpBase
 
                     value_to_form_progressbar += 15;
                     formprogress.PeredachaLoadaPB(value_to_form_progressbar);
+                    value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
+                    formprogress.PeredachaLabelPB(value_label_progessbar);
 
                     conn.Close();
                     conn.Dispose();
@@ -477,9 +518,14 @@ namespace BackUpBase
                     ProgressBarForm formprogress = new ProgressBarForm();
                     formprogress.Show();
 
+                    formprogress.Refresh();
+                    Thread.Sleep(1000);
+
                     this.Hide();
 
                     int value_to_form_progressbar = 0;
+                    string value_label_progessbar = "Пожалуйста подождите, идет резервное копирование баз данных";
+
                     string nameBase;
 
                     //------ ALLORG
@@ -500,9 +546,13 @@ namespace BackUpBase
 
                     value_to_form_progressbar += 15;
                     formprogress.PeredachaLoadaPB(value_to_form_progressbar);
+                    value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
+                    formprogress.PeredachaLabelPB(value_label_progessbar);
 
                     conn.Close();
                     conn.Dispose();
+
+                    Thread.Sleep(5000);
 
                     //------ EX_BD_PRIM
                     conn = new SqlConnection(connectionString);
@@ -524,9 +574,13 @@ namespace BackUpBase
 
                     value_to_form_progressbar += 15;
                     formprogress.PeredachaLoadaPB(value_to_form_progressbar);
+                    value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
+                    formprogress.PeredachaLabelPB(value_label_progessbar);
 
                     conn.Close();
                     conn.Dispose();
+
+                    Thread.Sleep(5000);
 
                     //------ EX_BD_USER
                     conn = new SqlConnection(connectionString);
@@ -548,9 +602,13 @@ namespace BackUpBase
 
                     value_to_form_progressbar += 15;
                     formprogress.PeredachaLoadaPB(value_to_form_progressbar);
+                    value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
+                    formprogress.PeredachaLabelPB(value_label_progessbar);
 
                     conn.Close();
                     conn.Dispose();
+
+                    Thread.Sleep(5000);
 
                     //------ EX_BD
                     conn = new SqlConnection(connectionString);
@@ -572,9 +630,13 @@ namespace BackUpBase
 
                     value_to_form_progressbar += 15;
                     formprogress.PeredachaLoadaPB(value_to_form_progressbar);
+                    value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
+                    formprogress.PeredachaLabelPB(value_label_progessbar);
 
                     conn.Close();
                     conn.Dispose();
+
+                    Thread.Sleep(5000);
 
                     //----------- 1SBASE
                     conn = new SqlConnection(connectionString);
@@ -593,11 +655,16 @@ namespace BackUpBase
                     command = new SqlCommand(sql, conn);
                     command.CommandTimeout = 0;
                     command.ExecuteNonQuery();
+
                     value_to_form_progressbar += 15;
                     formprogress.PeredachaLoadaPB(value_to_form_progressbar);
+                    value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
+                    formprogress.PeredachaLabelPB(value_label_progessbar);
 
                     conn.Close();
                     conn.Dispose();
+
+                    Thread.Sleep(5000);
 
                     //---------------SMBusiness
                     conn = new SqlConnection(connectionString);
@@ -619,9 +686,13 @@ namespace BackUpBase
 
                     value_to_form_progressbar += 15;
                     formprogress.PeredachaLoadaPB(value_to_form_progressbar);
+                    value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
+                    formprogress.PeredachaLabelPB(value_label_progessbar);
 
                     conn.Close();
                     conn.Dispose();
+
+                    Thread.Sleep(5000);
 
                     //---------- FOND
                     conn = new SqlConnection(connectionString);
@@ -643,6 +714,8 @@ namespace BackUpBase
 
                     value_to_form_progressbar += 15;
                     formprogress.PeredachaLoadaPB(value_to_form_progressbar);
+                    value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
+                    formprogress.PeredachaLabelPB(value_label_progessbar);
 
                     conn.Close();
                     conn.Dispose();
@@ -662,8 +735,8 @@ namespace BackUpBase
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://www.linkedin.com/in/vitaliy-petukhov-206a3a156/");
-        }             
-       
-        
+        }
+
+
     }
 }
