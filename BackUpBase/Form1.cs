@@ -15,8 +15,6 @@ using System.IO.Compression;
 namespace BackUpBase
 {   
 
-   
-
     public partial class Form1 : Form
     {
         private SqlConnection conn;
@@ -28,29 +26,40 @@ namespace BackUpBase
 
         public string[] server2020arr = 
         { 
-            "SERVER2020", 
-            "server2020", 
-            "Server2020", 
-            "SeRvEr2020", 
-            "sERVER2020",
-            "sErVeR2020"
+            "SERVER2020", "server2020", 
+            "Server2020", "SeRvEr2020", 
+            "sERVER2020", "sErVeR2020",
+            "SERver2020", "serVER2020",
+            "SErver2020", "seRVER200",
+            "SERVer2020", "servER2020",
+            "SERVEr2020", "serveR2020",
+            "SeRVER2020", "sErver2020",
+            "SErVER2020", "seRver2020",
+            "SERvER2020", "serVer2020",
+            "SERVeR2020", "servEr2020"
         };
 
         public string[] winserverarr =
         {
-            "WINSERVER",
-            "Winserver",
-            "wINSERVER",
-            "winserver",
-            "WiNsErVeR",
-            "wInSeRvEr"
+            "WINSERVER", "Winserver",
+            "wINSERVER", "winserver",
+            "WiNsErVeR", "wInSeRvEr",
+            "wInserver", "WiNSERVER",
+            "wiNserver", "WInSERVER",
+            "winServer", "WINsERVER",
+            "winsErver", "WINSeRVER",
+            "winseRver", "WINSErVER",
+            "winserVer", "WINSERvER",
+            "winservEr", "WINSERVeR",
+            "winserveR", "WINSERVEr",
+            "WINserver", "winSERVER"
+
         };
 
         public Form1()
         {
             InitializeComponent();
 
-            linkLabel1.LinkClicked += linkLabel1_LinkClicked;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -82,23 +91,11 @@ namespace BackUpBase
         {
             try
             {
-                if (textDataSource.Text.CompareTo("") == 0)
+                if (textDataSource.Text.CompareTo("") == 0 || txtPassword.Text.CompareTo("") == 0 || txtPassword.Text.CompareTo("") == 0)
                 {
-                    MessageBox.Show("Ошибка подключения к базе данных!\nПроверьте правильность ввода наименования сервера.");
+                    MessageBox.Show("Ошибка подключения к базе данных!\nПроверьте правильность ввода данных.");
                     return;
-                }
-                
-                if (txtPassword.Text.CompareTo("") == 0)
-                {
-                    MessageBox.Show("Ошибка подключения к базе данных!\nПроверьте правильность ввода логина для подключения.");
-                    return;
-                }
-
-                if (txtUserId.Text.CompareTo("") == 0)
-                {
-                    MessageBox.Show("Ошибка подключения к базе данных!\nПроверьте правильность ввода пароля для подключения.");
-                    return;
-                }
+                }                
 
                 connectionString = "Data Source = " +textDataSource.Text + "; User Id = " +txtUserId.Text+ "; Password = " +txtPassword.Text+";";
                 conn = new SqlConnection(connectionString);
@@ -143,9 +140,8 @@ namespace BackUpBase
                 {
                     checkBox1.Visible = false;
                     checkBox1.Enabled = false;
-                }              
+                }  
 
-                //MessageBox.Show("Подключение к источнику данных произведено успешно.\nТеперь необходимо выбрать базу данных для резервного копирования!");
             }
             catch (Exception ex)
             {
@@ -174,6 +170,8 @@ namespace BackUpBase
 
         private void BtnBackup_Click(object sender, EventArgs e)
         {
+            conn = new SqlConnection(connectionString);
+
             try
             {
                 if (cmdDatabases.Text.CompareTo("") == 0)
@@ -187,8 +185,7 @@ namespace BackUpBase
                     MessageBox.Show("Тип копии не выбран!");
                     return;
                 }
-
-                conn = new SqlConnection(connectionString);
+                
                 conn.Open();
 
                 if (typeBackpupCB.SelectedIndex == 0)
@@ -197,21 +194,23 @@ namespace BackUpBase
                 }
                 else
                 {                
-                    sql = "BACKUP DATABASE [" + cmdDatabases.Text + "] TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + ".bak' " + "WITH DIFFERENTIAL";//"-" + DateTime.Now.Ticks.ToString() + ".bak'";
+                    sql = "BACKUP DATABASE [" + cmdDatabases.Text + "] TO DISK = '" + txtBackupLoc.Text + "\\" + cmdDatabases.Text + ".bak' " + "WITH DIFFERENTIAL";
                 }
                 command = new SqlCommand(sql, conn);
                 command.CommandTimeout = 0;
-                command.ExecuteNonQuery();
-                conn.Close();
-                conn.Dispose();
-                MessageBox.Show("Резервное копирование произведено успешно !");
+                command.ExecuteNonQuery();                
 
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
-
+            finally
+            {
+                conn.Close();
+                conn.Dispose();
+                MessageBox.Show("Резервное копирование произведено успешно !");
+            }
         }
 
         private void BtnBrowse_Click(object sender, EventArgs e)
@@ -238,39 +237,41 @@ namespace BackUpBase
 
         private void BtnRestore_Click(object sender, EventArgs e)
         {
+            conn = new SqlConnection(connectionString);
             try
             {
-
                 if (cmdDatabases.Text.CompareTo("") == 0)
                 {
                     MessageBox.Show("Резервная копия базы данных не выбрана!");
                     return;
-                }                
-
-                conn = new SqlConnection(connectionString);
+                }              
+                                
                 conn.Open();
                 sql = "Alter Database " + cmdDatabases.Text + " SET SINGLE_USER WITH ROLLBACK IMMEDIATE;";
                 sql += "Restore Database " + cmdDatabases.Text + " FROM Disk = '" + txtRestoreFileLoc.Text + "' WITH REPLACE;";
                 command = new SqlCommand(sql, conn);
                 command.ExecuteNonQuery();
-                conn.Close();
-                conn.Dispose();
-                MessageBox.Show("Восстановление базы данных из резервной копии произведено успешно !");
+                
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
+            finally
+            {
+                conn.Close();
+                conn.Dispose();
+                MessageBox.Show("Восстановление базы данных из резервной копии произведено успешно !");
+            }
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            CheckBox checkBox = (CheckBox)sender; // приводим отправителя к элементу типа CheckBox
+            CheckBox checkBox = (CheckBox)sender; 
             if (checkBox.Checked == true)
             {
                 BtnBackupAll.Enabled = true;
                 BtnBackupAll.Visible = true;
-
                 BtnBackup.Enabled = false;
                 BtnBackup.Visible = false;
             }
@@ -278,16 +279,24 @@ namespace BackUpBase
             {
                 BtnBackupAll.Enabled = false;
                 BtnBackupAll.Visible = false;
-
                 BtnBackup.Enabled = true;
                 BtnBackup.Visible = true;
             }
         }
 
         private void BtnBackupAll_Click(object sender, EventArgs e)
-        {                       
-             try 
+        {
+            conn = new SqlConnection(connectionString);
+
+            ProgressBarForm formprogress = new ProgressBarForm();
+
+            int value_to_form_progressbar = 0;
+            string value_label_progessbar = "Пожалуйста подождите, идет резервное копирование баз данных";
+            string nameBase = "";
+
+            try 
             {
+                conn.Open();
 
                 if (txtBackupLoc.Text.CompareTo("") == 0)
                 {
@@ -299,110 +308,88 @@ namespace BackUpBase
                 {
                     MessageBox.Show("Тип копии не выбран!");
                     return;
-                }
-
-                if(server2020arr.Contains(textDataSource.Text))
+                }              
+                
+                if (server2020arr.Contains(textDataSource.Text))
                 {
-                    ProgressBarForm formprogress = new ProgressBarForm();
                     formprogress.Show();
-
                     formprogress.Refresh();
                     Thread.Sleep(1000);
+                    this.Hide();                  
 
-                    this.Hide();
+                    //------ ALLORG   
+                        nameBase = "ALLORG";
 
-                    int value_to_form_progressbar = 0;
-                    string value_label_progessbar = "Пожалуйста подождите, идет резервное копирование баз данных";
+                        if (typeBackpupCB.SelectedIndex == 0)
+                        {
+                            sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
+                        }
+                        else
+                        {
+                            sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
+                        }
 
-                    string nameBase;                    
+                        command = new SqlCommand(sql, conn);
+                        command.CommandTimeout = 0;
+                        command.ExecuteNonQuery();
 
-                    //------ ALLORG
-                    conn = new SqlConnection(connectionString);
-                    conn.Open();
-                    nameBase = "ALLORG";
-
-                    if(typeBackpupCB.SelectedIndex == 0)
-                    {
-                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
-                    }
-                    else
-                    {
-                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
-                    }
+                        value_to_form_progressbar += 15;
+                        formprogress.PeredachaLoadaPB(value_to_form_progressbar);
+                        value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
+                        formprogress.PeredachaLabelPB(value_label_progessbar);                   
+                        Thread.Sleep(5000);
                     
-                    command = new SqlCommand(sql, conn);
-                    command.CommandTimeout = 0;
-                    command.ExecuteNonQuery();
                     
-                    value_to_form_progressbar += 15;
-                    formprogress.PeredachaLoadaPB(value_to_form_progressbar);
-                    value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
-                    formprogress.PeredachaLabelPB(value_label_progessbar);
-
-                    conn.Close();
-                    conn.Dispose();
-
-                    Thread.Sleep(5000);
-
                     //------ EX_BD_PRIM
-                    conn = new SqlConnection(connectionString);
-                    conn.Open();
-                    nameBase = "EX_BD_PRIM";
 
-                    if (typeBackpupCB.SelectedIndex == 0)
-                    {
-                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
-                    }
-                    else
-                    {
-                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
-                    }
+                        nameBase = "EX_BD_PRIM";
 
-                    command = new SqlCommand(sql, conn);
-                    command.CommandTimeout = 0;
-                    command.ExecuteNonQuery();
+                        if (typeBackpupCB.SelectedIndex == 0)
+                        {
+                            sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
+                        }
+                        else
+                        {
+                            sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
+                        }
 
-                    value_to_form_progressbar += 15;
-                    formprogress.PeredachaLoadaPB(value_to_form_progressbar);
-                    value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
-                    formprogress.PeredachaLabelPB(value_label_progessbar);
+                        command = new SqlCommand(sql, conn);
+                        command.CommandTimeout = 0;
+                        command.ExecuteNonQuery();
 
-                    conn.Close();
-                    conn.Dispose();
+                        value_to_form_progressbar += 15;
+                        formprogress.PeredachaLoadaPB(value_to_form_progressbar);
+                        value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
+                        formprogress.PeredachaLabelPB(value_label_progessbar);                   
+                        Thread.Sleep(5000);                  
 
-                    Thread.Sleep(5000);
 
                     //------ Lab
-                    conn = new SqlConnection(connectionString);
-                    conn.Open();
-                    nameBase = "Lab";
+                   
+                        nameBase = "Lab";
 
-                    if (typeBackpupCB.SelectedIndex == 0)
-                    {
-                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
-                    }
-                    else
-                    {
-                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
-                    }
+                        if (typeBackpupCB.SelectedIndex == 0)
+                        {
+                            sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
+                        }
+                        else
+                        {
+                            sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
+                        }
 
-                    command = new SqlCommand(sql, conn);
-                    command.CommandTimeout = 0;
-                    command.ExecuteNonQuery();
+                        command = new SqlCommand(sql, conn);
+                        command.CommandTimeout = 0;
+                        command.ExecuteNonQuery();
 
-                    value_to_form_progressbar += 15;
-                    formprogress.PeredachaLoadaPB(value_to_form_progressbar);
-                    value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
-                    formprogress.PeredachaLabelPB(value_label_progessbar);
-
-                    conn.Close();
-                    conn.Dispose();
-
-                    Thread.Sleep(5000);
+                        value_to_form_progressbar += 15;
+                        formprogress.PeredachaLoadaPB(value_to_form_progressbar);
+                        value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
+                        formprogress.PeredachaLabelPB(value_label_progessbar);
+                        Thread.Sleep(5000);
+                   
 
                     //------ EX_BD
-                    conn = new SqlConnection(connectionString);
-                    conn.Open();
+                   
                     nameBase = "EX_BD";
 
                     if (typeBackpupCB.SelectedIndex == 0)
@@ -422,15 +409,10 @@ namespace BackUpBase
                     formprogress.PeredachaLoadaPB(value_to_form_progressbar);
                     value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
                     formprogress.PeredachaLabelPB(value_label_progessbar);
-
-                    conn.Close();
-                    conn.Dispose();
-
                     Thread.Sleep(5000);
 
                     //----------- 1SBASE
-                    conn = new SqlConnection(connectionString);
-                    conn.Open();
+
                     nameBase = "1SBASE";
 
                     if (typeBackpupCB.SelectedIndex == 0)
@@ -445,19 +427,15 @@ namespace BackUpBase
                     command = new SqlCommand(sql, conn);
                     command.CommandTimeout = 0;
                     command.ExecuteNonQuery();
+
                     value_to_form_progressbar += 15;
                     formprogress.PeredachaLoadaPB(value_to_form_progressbar);
                     value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
                     formprogress.PeredachaLabelPB(value_label_progessbar);
-
-                    conn.Close();
-                    conn.Dispose();
-
                     Thread.Sleep(5000);
 
                     //---------------EX_BD_USER
-                    conn = new SqlConnection(connectionString);
-                    conn.Open();
+
                     nameBase = "EX_BD_USER";
 
                     if (typeBackpupCB.SelectedIndex == 0)
@@ -477,15 +455,10 @@ namespace BackUpBase
                     formprogress.PeredachaLoadaPB(value_to_form_progressbar);
                     value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
                     formprogress.PeredachaLabelPB(value_label_progessbar);
-
-                    conn.Close();
-                    conn.Dispose();
-
                     Thread.Sleep(5000);
 
                     //---------- FOND
-                    conn = new SqlConnection(connectionString);
-                    conn.Open();
+
                     nameBase = "FOND";
 
                     if (typeBackpupCB.SelectedIndex == 0)
@@ -505,229 +478,189 @@ namespace BackUpBase
                     formprogress.PeredachaLoadaPB(value_to_form_progressbar);
                     value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
                     formprogress.PeredachaLabelPB(value_label_progessbar);
-
-                    conn.Close();
-                    conn.Dispose();
 
                     MessageBox.Show("Резервное копирование всех баз SERVER2020 успешно произведено!");
                 }
               
-
                 if (winserverarr.Contains(textDataSource.Text))
                 {
-                    ProgressBarForm formprogress = new ProgressBarForm();
                     formprogress.Show();
-
                     formprogress.Refresh();
                     Thread.Sleep(1000);
 
                     this.Hide();
 
-                    int value_to_form_progressbar = 0;
-                    string value_label_progessbar = "Пожалуйста подождите, идет резервное копирование баз данных";
-
-                    string nameBase;
-
                     //------ ALLORG
-                    conn = new SqlConnection(connectionString);
-                    conn.Open();
-                    nameBase = "ALLORG";
-                    if (typeBackpupCB.SelectedIndex == 0)
-                    {
-                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
-                    }
-                    else
-                    {
-                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
-                    }
-                    command = new SqlCommand(sql, conn);
-                    command.CommandTimeout = 0;
-                    command.ExecuteNonQuery();
 
-                    value_to_form_progressbar += 15;
-                    formprogress.PeredachaLoadaPB(value_to_form_progressbar);
-                    value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
-                    formprogress.PeredachaLabelPB(value_label_progessbar);
+                        nameBase = "ALLORG";
 
-                    conn.Close();
-                    conn.Dispose();
+                        if (typeBackpupCB.SelectedIndex == 0)
+                        {
+                            sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
+                        }
+                        else
+                        {
+                            sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
+                        }
+                        command = new SqlCommand(sql, conn);
+                        command.CommandTimeout = 0;
+                        command.ExecuteNonQuery();
 
-                    Thread.Sleep(5000);
+                        value_to_form_progressbar += 15;
+                        formprogress.PeredachaLoadaPB(value_to_form_progressbar);
+                        value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
+                        formprogress.PeredachaLabelPB(value_label_progessbar);
+                        Thread.Sleep(5000);
 
                     //------ EX_BD_PRIM
-                    conn = new SqlConnection(connectionString);
-                    conn.Open();
-                    nameBase = "EX_BD_PRIM";
 
-                    if (typeBackpupCB.SelectedIndex == 0)
-                    {
-                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
-                    }
-                    else
-                    {
-                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
-                    }
+                        nameBase = "EX_BD_PRIM";
 
-                    command = new SqlCommand(sql, conn);
-                    command.CommandTimeout = 0;
-                    command.ExecuteNonQuery();
+                        if (typeBackpupCB.SelectedIndex == 0)
+                        {
+                            sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
+                        }
+                        else
+                        {
+                            sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
+                        }
 
-                    value_to_form_progressbar += 15;
-                    formprogress.PeredachaLoadaPB(value_to_form_progressbar);
-                    value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
-                    formprogress.PeredachaLabelPB(value_label_progessbar);
+                        command = new SqlCommand(sql, conn);
+                        command.CommandTimeout = 0;
+                        command.ExecuteNonQuery();
 
-                    conn.Close();
-                    conn.Dispose();
-
-                    Thread.Sleep(5000);
+                        value_to_form_progressbar += 15;
+                        formprogress.PeredachaLoadaPB(value_to_form_progressbar);
+                        value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
+                        formprogress.PeredachaLabelPB(value_label_progessbar);
+                        Thread.Sleep(5000);
 
                     //------ EX_BD_USER
-                    conn = new SqlConnection(connectionString);
-                    conn.Open();
-                    nameBase = "EX_BD_USER";
 
-                    if (typeBackpupCB.SelectedIndex == 0)
-                    {
-                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
-                    }
-                    else
-                    {
-                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
-                    }
+                        nameBase = "EX_BD_USER";
 
-                    command = new SqlCommand(sql, conn);
-                    command.CommandTimeout = 0;
-                    command.ExecuteNonQuery();
+                        if (typeBackpupCB.SelectedIndex == 0)
+                        {
+                            sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
+                        }
+                        else
+                        {
+                            sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
+                        }
 
-                    value_to_form_progressbar += 15;
-                    formprogress.PeredachaLoadaPB(value_to_form_progressbar);
-                    value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
-                    formprogress.PeredachaLabelPB(value_label_progessbar);
+                        command = new SqlCommand(sql, conn);
+                        command.CommandTimeout = 0;
+                        command.ExecuteNonQuery();
 
-                    conn.Close();
-                    conn.Dispose();
-
-                    Thread.Sleep(5000);
+                        value_to_form_progressbar += 15;
+                        formprogress.PeredachaLoadaPB(value_to_form_progressbar);
+                        value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
+                        formprogress.PeredachaLabelPB(value_label_progessbar);
+                        Thread.Sleep(5000);
 
                     //------ EX_BD
-                    conn = new SqlConnection(connectionString);
-                    conn.Open();
-                    nameBase = "EX_BD";
 
-                    if (typeBackpupCB.SelectedIndex == 0)
-                    {
-                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
-                    }
-                    else
-                    {
-                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
-                    }
+                        nameBase = "EX_BD";
 
-                    command = new SqlCommand(sql, conn);
-                    command.CommandTimeout = 0;
-                    command.ExecuteNonQuery();
+                        if (typeBackpupCB.SelectedIndex == 0)
+                        {
+                            sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
+                        }
+                        else
+                        {
+                            sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
+                        }
 
-                    value_to_form_progressbar += 15;
-                    formprogress.PeredachaLoadaPB(value_to_form_progressbar);
-                    value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
-                    formprogress.PeredachaLabelPB(value_label_progessbar);
+                        command = new SqlCommand(sql, conn);
+                        command.CommandTimeout = 0;
+                        command.ExecuteNonQuery();
 
-                    conn.Close();
-                    conn.Dispose();
-
-                    Thread.Sleep(5000);
+                        value_to_form_progressbar += 15;
+                        formprogress.PeredachaLoadaPB(value_to_form_progressbar);
+                        value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
+                        formprogress.PeredachaLabelPB(value_label_progessbar);
+                        Thread.Sleep(5000);
 
                     //----------- 1SBASE
-                    conn = new SqlConnection(connectionString);
-                    conn.Open();
-                    nameBase = "1SBASE";
 
-                    if (typeBackpupCB.SelectedIndex == 0)
-                    {
-                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
-                    }
-                    else
-                    {
-                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
-                    }
+                        nameBase = "1SBASE";
 
-                    command = new SqlCommand(sql, conn);
-                    command.CommandTimeout = 0;
-                    command.ExecuteNonQuery();
+                        if (typeBackpupCB.SelectedIndex == 0)
+                        {
+                            sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
+                        }
+                        else
+                        {
+                            sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
+                        }
 
-                    value_to_form_progressbar += 15;
-                    formprogress.PeredachaLoadaPB(value_to_form_progressbar);
-                    value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
-                    formprogress.PeredachaLabelPB(value_label_progessbar);
+                        command = new SqlCommand(sql, conn);
+                        command.CommandTimeout = 0;
+                        command.ExecuteNonQuery();
 
-                    conn.Close();
-                    conn.Dispose();
-
-                    Thread.Sleep(5000);
+                        value_to_form_progressbar += 15;
+                        formprogress.PeredachaLoadaPB(value_to_form_progressbar);
+                        value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
+                        formprogress.PeredachaLabelPB(value_label_progessbar);
+                        Thread.Sleep(5000);
 
                     //---------------SMBusiness
-                    conn = new SqlConnection(connectionString);
-                    conn.Open();
-                    nameBase = "SMBusiness";
 
-                    if (typeBackpupCB.SelectedIndex == 0)
-                    {
-                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
-                    }
-                    else
-                    {
-                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
-                    }
+                        nameBase = "SMBusiness";
 
-                    command = new SqlCommand(sql, conn);
-                    command.CommandTimeout = 0;
-                    command.ExecuteNonQuery();
+                        if (typeBackpupCB.SelectedIndex == 0)
+                        {
+                            sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
+                        }
+                        else
+                        {
+                            sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
+                        }
 
-                    value_to_form_progressbar += 15;
-                    formprogress.PeredachaLoadaPB(value_to_form_progressbar);
-                    value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
-                    formprogress.PeredachaLabelPB(value_label_progessbar);
+                        command = new SqlCommand(sql, conn);
+                        command.CommandTimeout = 0;
+                        command.ExecuteNonQuery();
 
-                    conn.Close();
-                    conn.Dispose();
-
-                    Thread.Sleep(5000);
+                        value_to_form_progressbar += 15;
+                        formprogress.PeredachaLoadaPB(value_to_form_progressbar);
+                        value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
+                        formprogress.PeredachaLabelPB(value_label_progessbar);
+                        Thread.Sleep(5000);
 
                     //---------- FOND
-                    conn = new SqlConnection(connectionString);
-                    conn.Open();
-                    nameBase = "FOND";
 
-                    if (typeBackpupCB.SelectedIndex == 0)
-                    {
-                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
-                    }
-                    else
-                    {
-                        sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
-                    }
+                        nameBase = "FOND";
 
-                    command = new SqlCommand(sql, conn);
-                    command.CommandTimeout = 0;
-                    command.ExecuteNonQuery();
+                        if (typeBackpupCB.SelectedIndex == 0)
+                        {
+                            sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak'";
+                        }
+                        else
+                        {
+                            sql = "BACKUP DATABASE [" + nameBase + "]" + " TO DISK = '" + txtBackupLoc.Text + "\\" + nameBase + ".bak' " + "WITH DIFFERENTIAL";
+                        }
 
-                    value_to_form_progressbar += 15;
-                    formprogress.PeredachaLoadaPB(value_to_form_progressbar);
-                    value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
-                    formprogress.PeredachaLabelPB(value_label_progessbar);
+                        command = new SqlCommand(sql, conn);
+                        command.CommandTimeout = 0;
+                        command.ExecuteNonQuery();
 
-                    conn.Close();
-                    conn.Dispose();
+                        value_to_form_progressbar += 15;
+                        formprogress.PeredachaLoadaPB(value_to_form_progressbar);
+                        value_label_progessbar = "Пожалуйста подождите, идет резервное копирование базы данных [" + nameBase + "]";
+                        formprogress.PeredachaLabelPB(value_label_progessbar);
 
                     MessageBox.Show("Резервное копирование всех баз WINSERVER успешно произведено!");
                 }
-
 
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);                
+            }
+            finally
+            {
+                conn.Close();
+                conn.Dispose();
             }
             
         }
@@ -736,7 +669,6 @@ namespace BackUpBase
         {
             System.Diagnostics.Process.Start("https://www.linkedin.com/in/vitaliy-petukhov-206a3a156/");
         }
-
 
     }
 }

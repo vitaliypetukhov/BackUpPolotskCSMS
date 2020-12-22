@@ -17,12 +17,7 @@ namespace BackUpBase
         {
             InitializeComponent();
         }
-
-        private void ProgressBarForm_Load(object sender, EventArgs e)
-        {
-
-        }
-       
+         
 
         public void PeredachaLoadaPB(int value)
         {
@@ -46,5 +41,6 @@ namespace BackUpBase
 
             label1.Refresh();
         }
+
     }
 }

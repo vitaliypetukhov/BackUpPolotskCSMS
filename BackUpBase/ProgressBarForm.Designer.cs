@@ -47,6 +47,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(0, 13);
             this.label1.TabIndex = 1;
+            this.label1.Text = "Пожалуйста подождите, идет резервное копирование баз данных";
             // 
             // ProgressBarForm
             // 
@@ -60,8 +61,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ProgressBarForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Load += new System.EventHandler(this.ProgressBarForm_Load);
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;           
             this.ResumeLayout(false);
             this.PerformLayout();
 
