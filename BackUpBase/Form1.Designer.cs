@@ -44,6 +44,8 @@
             this.cmdDatabases = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.typeBackpupCB = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.BtnBackupAll = new System.Windows.Forms.Button();
             this.BtnBackup = new System.Windows.Forms.Button();
             this.BtnBrowse = new System.Windows.Forms.Button();
@@ -55,8 +57,6 @@
             this.txtRestoreFileLoc = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.label7 = new System.Windows.Forms.Label();
-            this.typeBackpupCB = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -224,6 +224,28 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Создание резервной копии";
             // 
+            // typeBackpupCB
+            // 
+            this.typeBackpupCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.typeBackpupCB.FormattingEnabled = true;
+            this.typeBackpupCB.Items.AddRange(new object[] {
+            "INIT\t",
+            "DIFFERENTIAL"});
+            this.typeBackpupCB.Location = new System.Drawing.Point(156, 69);
+            this.typeBackpupCB.Name = "typeBackpupCB";
+            this.typeBackpupCB.Size = new System.Drawing.Size(365, 22);
+            this.typeBackpupCB.TabIndex = 6;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label7.Location = new System.Drawing.Point(12, 71);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(75, 14);
+            this.label7.TabIndex = 5;
+            this.label7.Text = "Тип копии";
+            // 
             // BtnBackupAll
             // 
             this.BtnBackupAll.Location = new System.Drawing.Point(536, 71);
@@ -337,28 +359,6 @@
             this.linkLabel1.Text = "Copyright © Петухов В.А, 2020  Все права защищены";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label7.Location = new System.Drawing.Point(12, 71);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(75, 14);
-            this.label7.TabIndex = 5;
-            this.label7.Text = "Тип копии";
-            // 
-            // typeBackpupCB
-            // 
-            this.typeBackpupCB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.typeBackpupCB.FormattingEnabled = true;
-            this.typeBackpupCB.Items.AddRange(new object[] {
-            "INIT\t",
-            "DIFFERENTIAL"});
-            this.typeBackpupCB.Location = new System.Drawing.Point(156, 69);
-            this.typeBackpupCB.Name = "typeBackpupCB";
-            this.typeBackpupCB.Size = new System.Drawing.Size(365, 22);
-            this.typeBackpupCB.TabIndex = 6;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -376,6 +376,7 @@
             this.MinimumSize = new System.Drawing.Size(733, 460);
             this.Name = "Form1";
             this.Text = "Создание резервных копий баз данных";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

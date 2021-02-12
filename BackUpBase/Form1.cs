@@ -84,13 +84,23 @@ namespace BackUpBase
             BtnDBFileBrowse.Enabled = false;
         }
 
-        private void Form1_Closing(object sender, FormClosingEventArgs e)
+        /*private void Form1_Closing(object sender, FormClosingEventArgs e)
         {
-            conn = new SqlConnection(connectionString);
-            conn.Close();
-            e.Cancel = true;
-            this.Close();
-        }
+            //conn = new SqlConnection(connectionString);            
+
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                //устанавливает флаг отмены события в истину
+                e.Cancel = true;
+                //спрашивает стоит ли завершится
+                if (MessageBox.Show("Вы уверены что хотите закрыть программу?", "BackUp", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    Application.Exit();
+                    conn.Close();
+                }
+            }
+        }*/
+
 
         private void BtnConnect_Click(object sender, EventArgs e)
         {
@@ -690,5 +700,19 @@ namespace BackUpBase
             System.Diagnostics.Process.Start("https://www.linkedin.com/in/vitaliy-petukhov-206a3a156/");
         }
 
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                //устанавливает флаг отмены события в истину
+                e.Cancel = true;
+                //спрашивает стоит ли завершится
+                if (MessageBox.Show("Вы уверены что хотите закрыть программу?", "Создание резервных копий баз данных", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    Application.Exit();
+                    //conn.Close();
+                }
+            }
+        }
     }
 }
