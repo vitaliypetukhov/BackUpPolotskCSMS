@@ -65,6 +65,11 @@ namespace BackUpBase
         private void Form1_Load(object sender, EventArgs e)
         {
             BtnDisconnect.Enabled = false;
+            BtnDisconnect.Visible = false;
+
+            BtnConnect.Enabled = true;
+            BtnConnect.Visible = true;
+
             cmdDatabases.Enabled = false;
             BtnBackup.Enabled = false;
             BtnRestore.Enabled = false;
@@ -120,7 +125,10 @@ namespace BackUpBase
                 txtPassword.Enabled = false;
                 txtUserId.Enabled = false;
                 BtnConnect.Enabled = false;
+                BtnConnect.Visible = false;
+
                 BtnDisconnect.Enabled = true;
+                BtnDisconnect.Visible = true;
 
                 BtnBackup.Enabled = true;
                 BtnRestore.Enabled = true;
@@ -161,6 +169,10 @@ namespace BackUpBase
             BtnBackup.Enabled = false;
             BtnRestore.Enabled = false;
             BtnConnect.Enabled = true;
+            BtnConnect.Visible = true;
+
+            BtnDisconnect.Visible = false;
+            BtnDisconnect.Enabled = false;
 
             checkBox1.Enabled = false;
 
@@ -211,6 +223,9 @@ namespace BackUpBase
                 conn.Dispose();
                 MessageBox.Show("Резервное копирование произведено успешно !");
             }
+
+            conn.Close();
+            conn.Dispose();
         }
 
         private void BtnBrowse_Click(object sender, EventArgs e)
@@ -274,6 +289,7 @@ namespace BackUpBase
                 BtnBackupAll.Visible = true;
                 BtnBackup.Enabled = false;
                 BtnBackup.Visible = false;
+                cmdDatabases.Enabled = false;
             }
             else
             {
@@ -281,6 +297,7 @@ namespace BackUpBase
                 BtnBackupAll.Visible = false;
                 BtnBackup.Enabled = true;
                 BtnBackup.Visible = true;
+                cmdDatabases.Enabled = true;
             }
         }
 
@@ -662,7 +679,10 @@ namespace BackUpBase
                 conn.Close();
                 conn.Dispose();
             }
-            
+
+            conn.Close();
+            conn.Dispose();
+
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
